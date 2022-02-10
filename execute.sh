@@ -1,0 +1,1 @@
+alias menucli="java -cp 'picocli-4.6.1.jar:./target/menu-cli.jar' com.cicdlectures.menucli.MenuClientCommand"
