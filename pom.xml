@@ -70,7 +70,7 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
+<!--       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <configuration>
           <archive>
@@ -84,7 +84,7 @@
           <finalName>menu-client</finalName>
           <appendAssemblyId>false</appendAssemblyId>
         </configuration>
-      </plugin>
+      </plugin> -->
     </plugins>
     <finalName>menu-cli</finalName>
   </build>
