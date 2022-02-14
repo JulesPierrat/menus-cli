@@ -98,7 +98,6 @@
           <target>11</target>
         </configuration>
       </plugin>
-      <plugin>
     </plugins>
     <finalName>menu-cli</finalName>
   </build>
