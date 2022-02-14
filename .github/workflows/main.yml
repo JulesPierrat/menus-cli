@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-java@v2
         with:
-          distribuction: 'zulu'
+          distribution: 'zulu'
           java-version: '11'
       - run: mvn clean compile assembly:single
       - uses: actions/upload-artifact@v2
