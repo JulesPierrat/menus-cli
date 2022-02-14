@@ -1,15 +1,9 @@
 package com.cicdlectures.menucli;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -21,8 +15,8 @@ public class MenuClientCommand implements Runnable {
     @Option(names = { "--server-url" })
     private String url = "http://localhost:8080";
 
-    @Parameters
-    private List<Integer> to_delete = new ArrayList<>();
+    @Option(names = "-id")
+    private Integer to_delete;
 
     public static void main(String[] args) {
         System.out.println("[SUCESS] menu-cli load");
@@ -36,7 +30,7 @@ public class MenuClientCommand implements Runnable {
     }
 
     @Command(name = "list-menus")
-    public void ListMenusCommand() throws IOException, InterruptedException {
+    public void ListMenusCommand() throws Exception{
         HttpClient client = HttpClient.newHttpClient();
 
         HttpRequest request = HttpRequest.newBuilder(URI.create(this.url + "/menus"))
@@ -45,26 +39,23 @@ public class MenuClientCommand implements Runnable {
                 .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        JSONArray array = new JSONArray(response.body());
+        System.out.println(response.body());
 
-        System.out.println(array);
-
-        for (int i = 0; i < array.length(); i++) {
-
-            JSONObject plat = array.getJSONObject(i);
-            System.out.println(plat.getInt("id") + " - " + plat.getString("name"));
-            JSONArray dishes = plat.getJSONArray("dishes");
-
-            for (int j = 0; j < dishes.length(); j++) {
-                System.out.println(" - " + dishes.getJSONObject(j).getString("name"));
-            }
-            System.out.println("\n ------------------ \n ");
-        }
     }
 
     @Command(name = "delete-menu")
-    public void DeleteMenuCommand() {
-        System.out.println(to_delete.get(0));
+    public void DeleteMenuCommand() throws Exception {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder(URI.create(this.url+ "/menus/" + this.to_delete))
+                .DELETE()
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() != 200) {
+            System.out.println("Mauvaise requête ! Format de la requete expliquée dans le README.md ");
+        } else {
+            System.out.println("Menu Retiré !");
+        }
     }
 
 }
