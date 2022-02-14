@@ -1,7 +1,15 @@
 package com.cicdlectures.menucli;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -10,7 +18,7 @@ import picocli.CommandLine.Parameters;
 
 @Command(name = "menucli")
 public class MenuClientCommand implements Runnable {
-    @Option(names = {"--server-url"})
+    @Option(names = { "--server-url" })
     private String url = "localhost:8080";
 
     @Parameters
@@ -28,13 +36,33 @@ public class MenuClientCommand implements Runnable {
     }
 
     @Command(name = "list-menus")
-    public void ListMenusCommand() {
-        System.out.println("List all the menus");
+    public void ListMenusCommand() throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+
+        HttpRequest request = HttpRequest.newBuilder(URI.create(this.url))
+                .GET()
+                .header("Content-type", "application/json")
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        JSONArray array = new JSONArray(response.body());
+
+        for (int i = 0; i < array.length(); i++) {
+
+            JSONObject plat = array.getJSONObject(i);
+            System.out.println(plat.getInt("id") + " - " + plat.getString("name"));
+            JSONArray dishes = plat.getJSONArray("dishes");
+
+            for (int j = 0; j < dishes.length(); j++) {
+                System.out.println(" - " + dishes.getJSONObject(j).getString("name"));
+            }
+            System.out.println("\n ------------------ \n ");
+        }
     }
 
     @Command(name = "delete-menu")
     public void DeleteMenuCommand() {
-        System.out.println("Delete one menu");
+        System.out.println(to_delete.get(0));
     }
 
 }
