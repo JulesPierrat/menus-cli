@@ -1,1 +1,1 @@
-alias menucli="java -cp 'picocli-4.6.1.jar:./target/menu-cli.jar' com.cicdlectures.menucli.MenuClientCommand"
+alias menucli="java -cp '$HOME/.m2/repository/info/picocli/picocli/4.6.1/picocli-4.6.1.jar:./target/menu-cli.jar' com.cicdlectures.menucli.MenuClientCommand"
