@@ -19,7 +19,7 @@ import picocli.CommandLine.Parameters;
 @Command(name = "menucli")
 public class MenuClientCommand implements Runnable {
     @Option(names = { "--server-url" })
-    private String url = "localhost:8080";
+    private String url = "http://localhost:8080";
 
     @Parameters
     private List<Integer> to_delete = new ArrayList<>();
@@ -39,13 +39,15 @@ public class MenuClientCommand implements Runnable {
     public void ListMenusCommand() throws IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
 
-        HttpRequest request = HttpRequest.newBuilder(URI.create(this.url))
+        HttpRequest request = HttpRequest.newBuilder(URI.create(this.url + "/menus"))
                 .GET()
                 .header("Content-type", "application/json")
                 .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         JSONArray array = new JSONArray(response.body());
+
+        System.out.println(array);
 
         for (int i = 0; i < array.length(); i++) {
 
